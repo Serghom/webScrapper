@@ -19,7 +19,6 @@ def url_get_items(url):
 def items_get_date(items):
     weekends = []
     for item in items:
-        # print(ite
         weekend = []
         month = item.find('th', {'class': 'month'})
         weekends_html = item.find_all('td', {'class': ['weekend', 'holiday weekend']})
