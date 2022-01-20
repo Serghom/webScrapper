@@ -1,5 +1,7 @@
-import requests, datetime
+import requests, re
 from bs4 import BeautifulSoup
+
+#  datetime,
 
 def month_converter(month):
     months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль',
@@ -12,8 +14,10 @@ def url_get_items(url):
 
     soup = BeautifulSoup(r.text, "lxml")
     calendars = soup.find('div', {'class': 'row'})
+    year = calendars.find('h1')
+    year = re.findall('(\d+)', year.text)[0]
     items = calendars.find_all('div', {'class': 'col-md-3'})
-    return items
+    return items, year
 
 
 def items_get_date(items):
@@ -31,10 +35,8 @@ def items_get_date(items):
     return weekends
 
 
-def write_to_file(weekends):
-    dt_obj = datetime.datetime.now()
-    dt_string = dt_obj.strftime("%Y")
-    file = open("hds{}.txt".format(dt_string), 'w')
+def write_to_file(weekends, year):
+    file = open("hds{}.txt".format(year), 'w')
     for month, days in weekends:
         file.write(str(month))
         for day in days:
@@ -46,7 +48,6 @@ def write_to_file(weekends):
 
 if __name__ == "__main__":
     url = 'http://www.consultant.ru/law/ref/calendar/proizvodstvennye/#shortday'
-    items = url_get_items(url)
+    items, year = url_get_items(url)
     weekends = items_get_date(items)
-    write_to_file(weekends)
-
+    write_to_file(weekends, year)
