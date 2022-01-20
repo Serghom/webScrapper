@@ -50,15 +50,20 @@ if __name__ == "__main__":
     parser.add_argument('--year')
     args = parser.parse_args()
 
-    #  datetime,
-    url = 'http://www.consultant.ru/law/ref/calendar/proizvodstvennye/#shortday'
+
     if args.year:
-        # print(args.year)
-        items = url_get_items(url)[0]
-        year = args.year
+        print("user argument {}".format(args.year))
+        url = 'http://www.consultant.ru/law/ref/calendar/proizvodstvennye/{}/'.format(args.year)
+        items, year = url_get_items(url)
+        # year = args.year
     else:
         # print("Using the default, boolean False.")
+        print("no use argument")
+        url = 'http://www.consultant.ru/law/ref/calendar/proizvodstvennye/#shortday'
         items, year = url_get_items(url)
 
     weekends = items_get_date(items)
+    print("get date")
     write_to_file(weekends, year)
+    print("write date to file")
+    print("done")
