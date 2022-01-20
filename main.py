@@ -1,7 +1,6 @@
-import requests, re
+import requests, re, argparse
 from bs4 import BeautifulSoup
 
-#  datetime,
 
 def month_converter(month):
     months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль',
@@ -47,7 +46,19 @@ def write_to_file(weekends, year):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Example of a single flag acting as a boolean and an option.")
+    parser.add_argument('--year')
+    args = parser.parse_args()
+
+    #  datetime,
     url = 'http://www.consultant.ru/law/ref/calendar/proizvodstvennye/#shortday'
-    items, year = url_get_items(url)
+    if args.year:
+        # print(args.year)
+        items = url_get_items(url)[0]
+        year = args.year
+    else:
+        # print("Using the default, boolean False.")
+        items, year = url_get_items(url)
+
     weekends = items_get_date(items)
     write_to_file(weekends, year)
